@@ -33,26 +33,46 @@ struct OnboardingScreen: View {
                             }
                             
                             Spacer(minLength: 0)
-                             
+                            
                             Button {
                                 print("skip clicked")
                             } label: {
                                 Text("skip")
                             }
-
-
+                            
+                            
                         }
                         .tint(Color.green)
                         .fontWeight(.bold)
+                        
                         //Movable slides
                         VStack{
                             Text(item.title)
                                 .font(.title.bold())
                             Text(item.subTitle)
                                 .font(.system(size:14))
-                            .multilineTextAlignment(.center)
-                            
-                            
+                                .multilineTextAlignment(.center)
+                        }
+                        
+                        Spacer()
+                        
+                        //MARK: next/login button
+                        VStack(spacing:15){
+                            Text("Next")
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(.vertical,12)
+                                .frame(maxWidth:.infinity)
+                                .background{Capsule()
+                                        .fill(Color.green)
+                                }
+                                .padding(.horizontal,100)
+                            HStack{
+                                Text("Terms and services")
+                                Text("Privacy policy")
+                            }
+                            .font(.caption2)
+                            .underline(true,color: .primary)
                         }
                     }
                     .padding(15)
@@ -61,9 +81,46 @@ struct OnboardingScreen: View {
             }
             .frame(width: size.width * CGFloat(onboardingItem.count),alignment: .leading)
         }
-       
+        
     }
+
 }
+
+
+
+//Resizable lottie view without background
+struct ResizableLottieView:UIViewRepresentable{
+    @Binding var onboardingItem:OnboardingItem
+    func makeUIView(context: Context) -> some UIView {
+        let view = UIView()
+        view.backgroundColor = .clear
+        setupLottieView(view)
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+        
+    }
+    
+    func setupLottieView(_ to:UIView){
+        let lottieView = onboardingItem.lottieView
+        lottieView.backgroundColor = .clear
+        lottieView.translatesAutoresizingMaskIntoConstraints = false
+        
+        //Applying constrains
+        let constrains = [
+            lottieView.widthAnchor.constraint(equalToConstant:to.widthAnchor),
+            lottieView.heightAnchor.constraint(equalToConstant:to.heightAnchor)
+        ]
+        
+        to.addSubview(lottieView)
+        to.addConstraint(constrains)
+    }
+    
+}
+
+
+
 
 struct OnboardingScreen_Previews: PreviewProvider {
     static var previews: some View {
